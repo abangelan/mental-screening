@@ -10,20 +10,61 @@ export default function FaceScreeningPage() {
     const [isCameraOpen, setIsCameraOpen] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [result, setResult] = useState(null);
+    const [error, setError] = useState(null); // Added error state
+    const [stream, setStream] = useState(null); // Added stream state
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
 
     const startCamera = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            setError(null);
+            // Use simpler constraints that work across more devices
+            const constraints = {
+                video: {
+                    facingMode: 'user',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            };
+
+            const newStream = await navigator.mediaDevices.getUserMedia(constraints);
             if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-                setIsCameraOpen(true);
-                setResult(null);
+                videoRef.current.srcObject = newStream;
             }
+            setStream(newStream);
+            setIsCameraOpen(true);
+            setResult(null);
         } catch (err) {
-            console.error("Error accessing camera:", err);
-            alert("Tidak dapat mengakses kamera. Pastikan Anda telah memberikan izin.");
+            console.error('Camera access error:', err);
+            let errorMessage = 'Tidak dapat mengakses kamera. ';
+
+            if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+                errorMessage += 'Kamera tidak ditemukan. Pastikan perangkat Anda memiliki kamera.';
+            } else if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                errorMessage += 'Akses kamera ditolak. Silakan izinkan akses kamera di pengaturan browser Anda.';
+            } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+                errorMessage += 'Kamera sedang digunakan oleh aplikasi lain. Tutup aplikasi lain yang menggunakan kamera.';
+            } else if (err.name === 'OverconstrainedError') {
+                errorMessage += 'Pengaturan kamera tidak didukung. Mencoba dengan pengaturan default...';
+                // Try again with minimal constraints
+                try {
+                    const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    if (videoRef.current) {
+                        videoRef.current.srcObject = fallbackStream;
+                    }
+                    setStream(fallbackStream);
+                    setIsCameraOpen(true);
+                    setResult(null);
+                    return; // Success with fallback
+                } catch (fallbackErr) {
+                    errorMessage = 'Tidak dapat mengakses kamera dengan pengaturan apapun.';
+                }
+            } else {
+                errorMessage += `Error: ${err.message}`;
+            }
+
+            setError(errorMessage);
+            setIsCameraOpen(false); // Ensure camera is not marked as open if there's an error
         }
     };
 
@@ -31,9 +72,11 @@ export default function FaceScreeningPage() {
         if (videoRef.current && videoRef.current.srcObject) {
             videoRef.current.srcObject.getTracks().forEach(track => track.stop());
             videoRef.current.srcObject = null;
-            setIsCameraOpen(false);
         }
+        setIsCameraOpen(false);
+        setStream(null);
     };
+
 
     const captureAndAnalyze = async () => {
         if (!videoRef.current || !canvasRef.current) return;
@@ -72,6 +115,20 @@ export default function FaceScreeningPage() {
                     Video Anda diproses secara lokal dan tidak pernah disimpan.
                 </p>
             </header>
+
+            {error && (
+                <div className="card bg-red-900/20 border-red-900/50 p-4">
+                    <p className="text-red-200 text-sm">
+                        <strong>⚠️ Error:</strong> {error}
+                    </p>
+                    <button
+                        onClick={() => { setError(null); startCamera(); }}
+                        className="btn btn-outline mt-3 text-sm"
+                    >
+                        Coba Lagi
+                    </button>
+                </div>
+            )}
 
             <div className="card flex flex-col items-center justify-center py-8 space-y-6 min-h-[400px]">
                 {!isCameraOpen && !result && !isAnalyzing && (
