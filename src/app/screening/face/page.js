@@ -15,25 +15,44 @@ export default function FaceScreeningPage() {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
 
-    const startCamera = async () => {
+    const [facingMode, setFacingMode] = useState('user'); // 'user' = front, 'environment' = back
+
+    const startCamera = async (preferredFacingMode = facingMode) => {
         try {
             setError(null);
+
+            // Stop any existing stream first
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+
             // Use simpler constraints that work across more devices
             const constraints = {
                 video: {
-                    facingMode: 'user',
+                    facingMode: preferredFacingMode,
                     width: { ideal: 1280 },
                     height: { ideal: 720 }
-                }
+                },
+                audio: false
             };
 
             const newStream = await navigator.mediaDevices.getUserMedia(constraints);
+
             if (videoRef.current) {
                 videoRef.current.srcObject = newStream;
+                // IMPORTANT: Play the video to show camera feed
+                videoRef.current.onloadedmetadata = () => {
+                    videoRef.current.play().catch(err => {
+                        console.error('Error playing video:', err);
+                        setError('Tidak dapat memutar video kamera. Coba refresh halaman.');
+                    });
+                };
             }
+
             setStream(newStream);
             setIsCameraOpen(true);
             setResult(null);
+            setFacingMode(preferredFacingMode);
         } catch (err) {
             console.error('Camera access error:', err);
             let errorMessage = 'Tidak dapat mengakses kamera. ';
@@ -48,13 +67,20 @@ export default function FaceScreeningPage() {
                 errorMessage += 'Pengaturan kamera tidak didukung. Mencoba dengan pengaturan default...';
                 // Try again with minimal constraints
                 try {
-                    const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    const fallbackStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: preferredFacingMode },
+                        audio: false
+                    });
                     if (videoRef.current) {
                         videoRef.current.srcObject = fallbackStream;
+                        videoRef.current.onloadedmetadata = () => {
+                            videoRef.current.play().catch(err => console.error('Play error:', err));
+                        };
                     }
                     setStream(fallbackStream);
                     setIsCameraOpen(true);
                     setResult(null);
+                    setFacingMode(preferredFacingMode);
                     return; // Success with fallback
                 } catch (fallbackErr) {
                     errorMessage = 'Tidak dapat mengakses kamera dengan pengaturan apapun.';
@@ -64,8 +90,13 @@ export default function FaceScreeningPage() {
             }
 
             setError(errorMessage);
-            setIsCameraOpen(false); // Ensure camera is not marked as open if there's an error
+            setIsCameraOpen(false);
         }
+    };
+
+    const toggleCamera = () => {
+        const newFacingMode = facingMode === 'user' ? 'environment' : 'user';
+        startCamera(newFacingMode);
     };
 
     const stopCamera = () => {
@@ -145,35 +176,36 @@ export default function FaceScreeningPage() {
                     </div>
                 )}
 
-                {isCameraOpen && (
-                    <div className="relative w-full max-w-md aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
-                        <video
-                            ref={videoRef}
-                            autoPlay
-                            playsInline
-                            muted
-                            className="w-full h-full object-cover transform scale-x-[-1]" // Mirror effect
-                        />
-                        <div className="absolute bottom-4 left-0 right-0 flex justify-center">
-                            <button
-                                onClick={captureAndAnalyze}
-                                className="btn btn-primary rounded-full px-8 shadow-xl border-2 border-white/20"
-                            >
-                                Tangkap & Analisis
+                {isCameraOpen && !result && (
+                    <div className="w-full space-y-4">
+                        <div className="relative w-full max-w-md mx-auto">
+                            <video
+                                ref={videoRef}
+                                autoPlay
+                                playsInline
+                                muted
+                                className="w-full rounded-lg border-2 border-[var(--border)]"
+                            />
+                            <canvas ref={canvasRef} width="640" height="480" className="hidden" />
+                        </div>
+                        <div className="flex gap-3 justify-center flex-wrap">
+                            <button onClick={toggleCamera} className="btn btn-outline text-sm">
+                                🔄 {facingMode === 'user' ? 'Kamera Belakang' : 'Kamera Depan'}
+                            </button>
+                            <button onClick={captureAndAnalyze} className="btn btn-primary">
+                                📸 Ambil Foto & Analisis
+                            </button>
+                            <button onClick={stopCamera} className="btn btn-outline">
+                                ✕ Tutup
                             </button>
                         </div>
                     </div>
-                )}
-
-                {isAnalyzing && (
+                )}{isAnalyzing && (
                     <div className="text-center space-y-4">
                         <div className="w-16 h-16 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto"></div>
                         <p className="text-[var(--muted-foreground)]">Memindai penanda wajah...</p>
                     </div>
                 )}
-
-                {/* Hidden canvas for capture */}
-                <canvas ref={canvasRef} width={640} height={480} className="hidden" />
 
                 {result && (
                     <div className="w-full space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
