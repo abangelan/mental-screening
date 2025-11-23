@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Mental Screening Assistant
 
-## Getting Started
+Aplikasi web modern untuk deteksi dini kesehatan mental menggunakan analisis AI (Teks, Suara, Wajah) dan tes standar klinis. Dirancang untuk Pasien dan Tenaga Kesehatan (Nakes).
 
-First, run the development server:
+## 🚀 Cara Menjalankan Aplikasi
 
+### 1. Persiapan
+Pastikan Anda sudah menginstal **Node.js** (versi 18 atau terbaru) di komputer Anda.
+
+### 2. Instalasi Dependensi
+Buka terminal di dalam folder proyek ini, lalu jalankan perintah berikut untuk mengunduh semua pustaka yang dibutuhkan:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Menjalankan Server Development
+Untuk memulai aplikasi, jalankan perintah:
+```bash
+npm run dev
+```
+Setelah server berjalan, buka browser Anda dan kunjungi **[http://localhost:3000](http://localhost:3000)**.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📱 Panduan Penggunaan Fitur
 
-## Learn More
+### 🏥 Mode Pasien (Patient)
+Pilih tombol **"Pasien"** di halaman depan untuk masuk ke portal pasien.
 
-To learn more about Next.js, take a look at the following resources:
+1. **Skrining Teks**
+   - Ketik apa yang Anda rasakan atau pikirkan.
+   - AI akan menganalisis sentimen dan kata kunci untuk mendeteksi tingkat stres atau kecemasan.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Analisis Suara**
+   - Tekan tombol mikrofon dan bicaralah selama 20-40 detik.
+   - Sistem akan menganalisis nada, intonasi, dan kestabilan suara.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Analisis Ekspresi Wajah**
+   - Izinkan akses kamera.
+   - Sistem akan memindai ekspresi mikro wajah untuk mendeteksi kelelahan (fatigue) atau emosi dominan.
+   - *Privasi*: Video diproses lokal dan tidak disimpan.
 
-## Deploy on Vercel
+4. **Tes Standar**
+   - **PHQ-9**: Kuesioner untuk skrining depresi.
+   - **GAD-7**: Kuesioner untuk skrining kecemasan umum.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 👨‍⚕️ Mode Tenaga Kesehatan (Nakes)
+Pilih tombol **"Tenaga Kesehatan"** di halaman depan.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Cek Burnout**
+   - Kuesioner khusus untuk mendeteksi risiko *burnout* (kelelahan kerja) pada tenaga medis.
+   - Memberikan rekomendasi tindakan berdasarkan tingkat risiko (Rendah, Sedang, Tinggi).
+
+2. **Statistik Rumah Sakit**
+   - **Heatmap**: Visualisasi tingkat stres per unit (IGD, ICU, Rawat Inap, dll).
+   - Memantau tren kesehatan mental staf secara keseluruhan.
+
+---
+
+## ℹ️ Catatan Teknis
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Vanilla CSS dengan Design Tokens (Premium UI)
+- **AI Engine**: Saat ini menggunakan *Mock AI Service* (Simulasi) untuk tujuan demonstrasi prototipe. Respons cepat dan konsisten untuk pengujian UI/UX.
+
+---
+*Dibuat oleh Tim Pengembang AI Mental Screening Assistant.*
+# mental-screening
