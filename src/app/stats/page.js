@@ -22,11 +22,13 @@ export default function StatsPage() {
     };
 
     return (
-        <div className="space-y-8">
+        <div className="max-w-5xl mx-auto space-y-8">
+            <NavigationControls />
+
             <header>
-                <h1 className="text-3xl font-bold mb-2">Statistik Rumah Sakit</h1>
+                <h1 className="text-3xl font-bold mb-2">Statistik & Riwayat</h1>
                 <p className="text-[var(--muted-foreground)]">
-                    Gambaran umum tren kesehatan mental di berbagai unit.
+                    Pantau perkembangan kesehatan mental Anda dari waktu ke waktu.
                 </p>
             </header>
 
@@ -86,8 +88,6 @@ export default function StatsPage() {
                     <div className="flex items-center gap-2"><div className="w-3 h-3 bg-red-500 rounded"></div> Kritis</div>
                 </div>
             </div>
-
-            <NavigationControls />
         </div>
     );
 }

@@ -39,11 +39,12 @@ export default function BurnoutScreeningPage() {
 
     return (
         <div className="max-w-3xl mx-auto space-y-8">
+            <NavigationControls />
+
             <header>
-                <h1 className="text-3xl font-bold mb-2">Penilaian Burnout</h1>
+                <h1 className="text-3xl font-bold mb-2">Cek Burnout Tenaga Kesehatan</h1>
                 <p className="text-[var(--muted-foreground)]">
-                    Skrining khusus untuk profesional kesehatan guna mendeteksi tanda-tanda awal burnout.
-                    Silakan jawab berdasarkan perasaan Anda selama 7 hari terakhir.
+                    Kuesioner khusus untuk mendeteksi tingkat burnout pada tenaga kesehatan. Jawab dengan jujur untuk hasil yang akurat.
                 </p>
             </header>
 
@@ -131,8 +132,6 @@ export default function BurnoutScreeningPage() {
                     </div>
                 </div>
             )}
-
-            <NavigationControls />
         </div>
     );
 }

@@ -63,10 +63,12 @@ export default function VoiceScreeningPage() {
 
     return (
         <div className="max-w-3xl mx-auto space-y-8">
+            <NavigationControls />
+
             <header>
                 <h1 className="text-3xl font-bold mb-2">Analisis Suara</h1>
                 <p className="text-[var(--muted-foreground)]">
-                    Rekam sampel suara singkat (20-40 detik). Bicaralah secara alami tentang hari Anda atau perasaan Anda.
+                    Rekam suara Anda selama beberapa detik. AI kami akan menganalisis nada, pitch, dan stabilitas vokal untuk mendeteksi stres atau kecemasan.
                 </p>
             </header>
 
@@ -148,8 +150,6 @@ export default function VoiceScreeningPage() {
                     </div>
                 </div>
             )}
-
-            <NavigationControls />
         </div>
     );
 }
