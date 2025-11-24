@@ -6,6 +6,8 @@ import Link from 'next/link';
 
 import NavigationControls from '@/components/ui/NavigationControls';
 
+import PrivacyNotice from '@/components/ui/PrivacyNotice';
+
 export default function VoiceScreeningPage() {
     const [isRecording, setIsRecording] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -13,6 +15,8 @@ export default function VoiceScreeningPage() {
     const [result, setResult] = useState(null);
     const mediaRecorderRef = useRef(null);
     const timerRef = useRef(null);
+
+    // ... (rest of the functions remain the same)
 
     const startRecording = async () => {
         try {
@@ -64,13 +68,23 @@ export default function VoiceScreeningPage() {
     return (
         <div className="max-w-3xl mx-auto space-y-8">
             <NavigationControls />
+            <PrivacyNotice />
 
             <header>
                 <h1 className="text-3xl font-bold mb-2">Analisis Suara</h1>
                 <p className="text-[var(--muted-foreground)]">
-                    Rekam suara Anda selama beberapa detik. AI kami akan menganalisis nada, pitch, dan stabilitas vokal untuk mendeteksi stres atau kecemasan.
+                    Rekam suara Anda saat membaca kalimat di bawah ini. AI kami akan menganalisis intonasi dan stabilitas suara Anda.
                 </p>
             </header>
+
+            {/* Guided Text Card */}
+            <div className="card bg-blue-50/50 border-blue-100 p-6 text-center">
+                <h3 className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">Kalimat untuk Dibaca</h3>
+                <p className="text-xl font-medium text-[var(--foreground)] leading-relaxed italic">
+                    "Saya merasa hari ini cukup melelahkan, namun saya tetap berusaha melakukan yang terbaik.
+                    Terkadang saya merasa cemas akan masa depan, tetapi saya ingin menjadi lebih tenang dan bahagia."
+                </p>
+            </div>
 
             <div className="card flex flex-col items-center justify-center py-16 space-y-8">
                 <div className={`relative w-32 h-32 rounded-full flex items-center justify-center transition-all duration-300 ${isRecording ? 'bg-red-50' : 'bg-[var(--muted)]'}`}>

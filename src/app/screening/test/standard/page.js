@@ -33,27 +33,35 @@ const DASS_QUESTIONS = [
 const ALL_QUESTIONS = [...DASS_QUESTIONS];
 const ITEMS_PER_PAGE = 10;
 
+import PrivacyNotice from '@/components/ui/PrivacyNotice';
+
+// ... (DASS_QUESTIONS and ALL_QUESTIONS remain the same)
+
 export default function UnifiedScreeningPage() {
     const [currentPage, setCurrentPage] = useState(0);
     const [answers, setAnswers] = useState({});
-    const [result, setResult] = useState(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [result, setResult] = useState(null);
 
     const totalPages = Math.ceil(ALL_QUESTIONS.length / ITEMS_PER_PAGE);
-    const progress = Math.round(((currentPage) / totalPages) * 100);
+    const currentQuestions = ALL_QUESTIONS.slice(
+        currentPage * ITEMS_PER_PAGE,
+        (currentPage + 1) * ITEMS_PER_PAGE
+    );
 
-    // Scroll to top on page change
-    useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [currentPage]);
+    const isPageComplete = currentQuestions.every((_, index) => {
+        const globalIndex = (currentPage * ITEMS_PER_PAGE) + index;
+        return answers[globalIndex] !== undefined;
+    });
 
-    const handleAnswer = (globalIndex, value) => {
-        setAnswers(prev => ({ ...prev, [globalIndex]: value }));
+    const handleAnswer = (index, value) => {
+        setAnswers(prev => ({ ...prev, [index]: value }));
     };
 
     const handleNext = () => {
         if (currentPage < totalPages - 1) {
             setCurrentPage(prev => prev + 1);
+            window.scrollTo(0, 0);
         } else {
             calculateResults();
         }
@@ -62,6 +70,7 @@ export default function UnifiedScreeningPage() {
     const handlePrev = () => {
         if (currentPage > 0) {
             setCurrentPage(prev => prev - 1);
+            window.scrollTo(0, 0);
         }
     };
 
@@ -72,8 +81,7 @@ export default function UnifiedScreeningPage() {
         await new Promise(r => setTimeout(r, 2000));
 
         let scores = {
-            depression: 0, anxiety: 0, stress: 0,
-            exhaustion: 0, depersonalization: 0, accomplishment: 0
+            depression: 0, anxiety: 0, stress: 0
         };
 
         ALL_QUESTIONS.forEach((q, i) => {
@@ -89,7 +97,6 @@ export default function UnifiedScreeningPage() {
         scores.stress *= 2;
 
         const getDASSLevel = (score, type) => {
-            // Simplified logic for brevity
             if (type === 'depression') return score >= 28 ? 'Sangat Berat' : score >= 14 ? 'Sedang/Berat' : 'Normal';
             if (type === 'anxiety') return score >= 20 ? 'Sangat Berat' : score >= 10 ? 'Sedang/Berat' : 'Normal';
             return score >= 34 ? 'Sangat Berat' : score >= 19 ? 'Sedang/Berat' : 'Normal';
@@ -104,9 +111,6 @@ export default function UnifiedScreeningPage() {
         });
         setIsAnalyzing(false);
     };
-
-    const currentQuestions = ALL_QUESTIONS.slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE);
-    const isPageComplete = currentQuestions.every((_, i) => answers[(currentPage * ITEMS_PER_PAGE) + i] !== undefined);
 
     if (result) {
         return <ResultView result={result} onReset={() => { setResult(null); setAnswers({}); setCurrentPage(0); }} />;
@@ -125,6 +129,7 @@ export default function UnifiedScreeningPage() {
     return (
         <div className="max-w-3xl mx-auto space-y-6 pb-20">
             <NavigationControls />
+            <PrivacyNotice />
 
             <header className="mb-8">
                 <h1 className="text-3xl font-bold mb-2">Kuesioner Kesehatan Mental</h1>
@@ -227,13 +232,32 @@ function ResultView({ result, onReset }) {
                 </div>
             </div>
 
-            <div className="card bg-[var(--muted)] border-[var(--border)]">
-                <h3 className="font-semibold mb-2">Rekomendasi Singkat</h3>
-                <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
-                    {result.dass.stress.level === 'Sangat Berat' || result.dass.depression.level === 'Sangat Berat' || result.dass.anxiety.level === 'Sangat Berat'
-                        ? "Hasil menunjukkan indikasi beban mental yang signifikan. Sangat disarankan untuk mengambil jeda sejenak, berbicara dengan orang terpercaya, atau berkonsultasi dengan profesional."
-                        : "Kondisi kesehatan mental Anda tampak cukup stabil. Pertahankan gaya hidup sehat dan manajemen stres yang baik."}
-                </p>
+            <div className="card bg-[var(--card)] border-[var(--border)]">
+                <h3 className="text-xl font-semibold mb-4">Rekomendasi & Tindakan Lanjut</h3>
+                <div className="space-y-6">
+                    <div className="border-l-4 border-[var(--primary)] pl-4">
+                        <h4 className="font-semibold text-[var(--foreground)] mb-2">Manajemen Diri</h4>
+                        <ul className="list-disc list-inside space-y-2 text-sm text-[var(--muted-foreground)]">
+                            <li>Praktikkan mindfulness atau meditasi selama 10 menit setiap hari.</li>
+                            <li>Pastikan tidur cukup (7-8 jam) dan teratur.</li>
+                            <li>Lakukan aktivitas fisik ringan seperti berjalan kaki setidaknya 30 menit.</li>
+                        </ul>
+                    </div>
+
+                    {(result.dass.stress.level === 'Sangat Berat' || result.dass.depression.level === 'Sangat Berat' || result.dass.anxiety.level === 'Sangat Berat') && (
+                        <div className="border-l-4 border-red-500 pl-4 bg-red-50/50 p-2 rounded-r-md">
+                            <h4 className="font-semibold text-red-700 mb-2">⚠️ Perhatian Khusus</h4>
+                            <p className="text-sm text-red-600 mb-2">
+                                Skor Anda menunjukkan tingkat beban emosional yang signifikan.
+                            </p>
+                            <ul className="list-disc list-inside space-y-2 text-sm text-red-600">
+                                <li>Sangat disarankan untuk berkonsultasi dengan psikolog atau psikiater.</li>
+                                <li>Jangan ragu untuk bercerita kepada orang terdekat yang Anda percaya.</li>
+                                <li>Jika merasa tidak aman, segera hubungi layanan darurat kesehatan mental.</li>
+                            </ul>
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="flex justify-center pt-4">

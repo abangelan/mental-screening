@@ -6,6 +6,8 @@ import Link from 'next/link';
 
 import NavigationControls from '@/components/ui/NavigationControls';
 
+import PrivacyNotice from '@/components/ui/PrivacyNotice';
+
 export default function FaceScreeningPage() {
     const [isCameraOpen, setIsCameraOpen] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -140,6 +142,7 @@ export default function FaceScreeningPage() {
     return (
         <div className="max-w-3xl mx-auto space-y-8">
             <NavigationControls />
+            <PrivacyNotice />
 
             <header>
                 <h1 className="text-3xl font-bold mb-2">Analisis Ekspresi Wajah</h1>
