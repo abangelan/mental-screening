@@ -6,18 +6,8 @@ import { useSearchParams } from 'next/navigation';
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
-    const [role, setRole] = useState(null); // 'patient' | 'nakes'
-    const searchParams = useSearchParams();
-
-    useEffect(() => {
-        const roleParam = searchParams.get('role');
-        if (roleParam) {
-            setRole(roleParam);
-        }
-    }, [searchParams]);
-
     return (
-        <UserContext.Provider value={{ role, setRole }}>
+        <UserContext.Provider value={{}}>
             {children}
         </UserContext.Provider>
     );

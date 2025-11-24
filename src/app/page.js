@@ -30,7 +30,7 @@ export default function Home() {
             Solusi Skrining Kesehatan Mental Modern
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-purple-400">
-              untuk Pasien & Tenaga Kesehatan
+              untuk Semua Orang
             </span>
           </h1>
 
@@ -38,12 +38,9 @@ export default function Home() {
             AI Mental Screening Assistant membantu Anda mendeteksi stres, kecemasan, depresi, dan burnout hanya dalam hitungan menit — melalui analisis teks, suara, dan ekspresi wajah. <strong className="text-[var(--foreground)]">Aman, akurat, dan sepenuhnya privat.</strong>
           </p>
 
-          <div className="flex gap-4 flex-col sm:flex-row w-full sm:w-auto">
-            <Link href="/dashboard?role=patient" className="btn btn-primary text-lg px-8 py-4 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1">
-              Mulai Skrining Gratis
-            </Link>
-            <Link href="/dashboard?role=nakes" className="btn btn-outline text-lg px-8 py-4">
-              Skrining untuk Tenaga Kesehatan
+          <div className="relative flex gap-4 flex-col sm:flex-row w-full sm:w-auto mt-8">
+            <Link href="/dashboard" className="btn btn-primary text-2xl px-12 py-6 shadow-[0_0_20px_rgba(var(--primary),0.5)] hover:shadow-[0_0_50px_rgba(var(--primary),0.8)] transition-all transform hover:-translate-y-2 hover:scale-105 font-extrabold tracking-wider animate-pulse relative z-10">
+              MULAI SKRINING SEKARANG
             </Link>
           </div>
 
@@ -70,7 +67,7 @@ export default function Home() {
               <h2 className="text-4xl font-bold mb-4">Mengapa Kesehatan Mental Harus Diukur Secara Objektif?</h2>
               <p className="text-lg text-[var(--muted-foreground)] max-w-3xl mx-auto leading-relaxed">
                 Kesehatan mental sering terabaikan karena <strong className="text-[var(--foreground)]">stigma</strong> dan <strong className="text-[var(--foreground)]">keterbatasan waktu konsultasi</strong>.
-                Dengan teknologi AI, skrining dapat dilakukan lebih cepat, lebih pribadi, dan lebih nyaman — baik untuk pasien maupun tenaga kesehatan.
+                Dengan teknologi AI, skrining dapat dilakukan lebih cepat, lebih pribadi, dan lebih nyaman — bagi siapa saja, kapan saja.
               </p>
             </div>
           </div>
@@ -198,21 +195,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Feature 4 */}
-              <div className="card p-8 hover:border-[var(--primary)] transition-all border-[var(--primary)]/50">
-                <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 rounded-xl bg-[var(--primary)]/20 text-3xl flex items-center justify-center flex-shrink-0">
-                    🏥
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3">🔹 4. Burnout Analyzer Khusus Tenaga Kesehatan</h3>
-                    <p className="text-[var(--muted-foreground)] leading-relaxed">
-                      Didesain untuk <strong className="text-[var(--foreground)]">dokter, perawat, dan tenaga medis lainnya</strong>.
-                      Membantu mendeteksi burnout sejak dini untuk mencegah kelelahan ekstrem.
-                    </p>
-                  </div>
-                </div>
-              </div>
+
 
               {/* Feature 5 */}
               <div className="card p-8 hover:border-[var(--primary)] transition-all">
@@ -244,7 +227,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold mb-6 text-[var(--foreground)]">Tentang Aplikasi</h2>
             <p className="text-lg text-[var(--muted-foreground)] leading-relaxed mb-8">
               AI Mental Screening Assistant adalah inisiatif teknologi kesehatan yang dirancang untuk mendemokratisasi akses terhadap skrining kesehatan mental awal.
-              Dikembangkan dengan visi untuk membantu masyarakat Indonesia dan tenaga kesehatan dalam mendeteksi gejala stres, kecemasan, dan burnout sedini mungkin menggunakan kecerdasan buatan yang etis dan terpercaya.
+              Dikembangkan dengan visi untuk membantu masyarakat Indonesia dalam mendeteksi gejala stres dan kecemasan sedini mungkin menggunakan kecerdasan buatan yang etis dan terpercaya.
             </p>
           </div>
         </section>

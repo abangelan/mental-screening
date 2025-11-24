@@ -29,33 +29,8 @@ const DASS_QUESTIONS = [
     { text: "Saya merasa hidup tidak berarti", category: 'depression', source: 'dass' }
 ];
 
-const BURNOUT_QUESTIONS = [
-    { text: "Saya merasa terkuras secara emosional dari pekerjaan saya", category: 'exhaustion', source: 'burnout' },
-    { text: "Saya merasa habis-habisan di akhir hari kerja", category: 'exhaustion', source: 'burnout' },
-    { text: "Saya merasa lelah ketika bangun di pagi hari dan harus menghadapi hari lain di tempat kerja", category: 'exhaustion', source: 'burnout' },
-    { text: "Bekerja dengan orang sepanjang hari benar-benar melelahkan bagi saya", category: 'exhaustion', source: 'burnout' },
-    { text: "Saya merasa burnout karena pekerjaan saya", category: 'exhaustion', source: 'burnout' },
-    { text: "Saya merasa frustrasi dengan pekerjaan saya", category: 'exhaustion', source: 'burnout' },
-    { text: "Saya merasa saya bekerja terlalu keras pada pekerjaan saya", category: 'exhaustion', source: 'burnout' },
-    { text: "Bekerja langsung dengan orang membuat saya terlalu stres", category: 'exhaustion', source: 'burnout' },
-    { text: "Saya merasa seperti di ujung tali", category: 'exhaustion', source: 'burnout' },
-    { text: "Saya merasa saya memperlakukan beberapa orang seolah-olah mereka adalah objek impersonal", category: 'depersonalization', source: 'burnout' },
-    { text: "Saya menjadi lebih tidak peduli terhadap orang sejak saya mulai pekerjaan ini", category: 'depersonalization', source: 'burnout' },
-    { text: "Saya khawatir pekerjaan ini membuat saya tidak peka secara emosional", category: 'depersonalization', source: 'burnout' },
-    { text: "Saya tidak terlalu peduli dengan apa yang terjadi pada beberapa orang", category: 'depersonalization', source: 'burnout' },
-    { text: "Saya merasa orang menyalahkan saya atas beberapa masalah mereka", category: 'depersonalization', source: 'burnout' },
-    { text: "Saya dapat memahami dengan mudah bagaimana perasaan orang-orang", category: 'accomplishment', source: 'burnout' },
-    { text: "Saya menangani masalah emosional dengan sangat efektif", category: 'accomplishment', source: 'burnout' },
-    { text: "Saya merasa saya secara positif mempengaruhi kehidupan orang lain melalui pekerjaan saya", category: 'accomplishment', source: 'burnout' },
-    { text: "Saya merasa sangat energik", category: 'accomplishment', source: 'burnout' },
-    { text: "Saya dapat dengan mudah menciptakan suasana santai dengan orang-orang", category: 'accomplishment', source: 'burnout' },
-    { text: "Saya merasa gembira setelah bekerja dekat dengan orang-orang", category: 'accomplishment', source: 'burnout' },
-    { text: "Saya telah mencapai banyak hal berharga dalam pekerjaan ini", category: 'accomplishment', source: 'burnout' },
-    { text: "Dalam pekerjaan saya, saya menangani masalah emosional dengan tenang", category: 'accomplishment', source: 'burnout' }
-];
-
 // Combine all questions
-const ALL_QUESTIONS = [...DASS_QUESTIONS, ...BURNOUT_QUESTIONS];
+const ALL_QUESTIONS = [...DASS_QUESTIONS];
 const ITEMS_PER_PAGE = 10;
 
 export default function UnifiedScreeningPage() {
@@ -103,9 +78,7 @@ export default function UnifiedScreeningPage() {
 
         ALL_QUESTIONS.forEach((q, i) => {
             const val = answers[i] || 0;
-            if (q.source === 'dass') {
-                scores[q.category] += val;
-            } else {
+            if (scores[q.category] !== undefined) {
                 scores[q.category] += val;
             }
         });
@@ -115,27 +88,6 @@ export default function UnifiedScreeningPage() {
         scores.anxiety *= 2;
         scores.stress *= 2;
 
-        // Burnout Accomplishment Reversal
-        // Max score for accomplishment is 8 items * 6 (max val) = 48? 
-        // Wait, burnout scale usually 0-6. Let's check options.
-        // We will use 0-3 for DASS and 0-6 for Burnout to match standard.
-        // BUT for simplicity in UI, we might map them to a similar visual scale or keep them distinct.
-        // Let's check the UI rendering part. We need different options for DASS vs Burnout questions.
-
-        // Actually, to keep it simple for the user as requested ("Mudah digunakan"), 
-        // let's unify the scale to 0-3 visually but map it internally?
-        // Or just show the correct options for each question type.
-        // DASS: 0-3. Burnout: 0-6.
-        // If we mix them on the same page, it might be confusing if options change.
-        // Better to keep DASS questions together and Burnout questions together?
-        // The array `ALL_QUESTIONS` has DASS first, then Burnout. So page 1-2 will be DASS, page 3-5 Burnout.
-        // That works.
-
-        // Recalculate Burnout Accomplishment (Reversed)
-        // 8 items. If we use 0-6 scale. Max is 48.
-        const maxAccomplishment = 8 * 6;
-        const accomplishmentReversed = maxAccomplishment - scores.accomplishment;
-
         const getDASSLevel = (score, type) => {
             // Simplified logic for brevity
             if (type === 'depression') return score >= 28 ? 'Sangat Berat' : score >= 14 ? 'Sedang/Berat' : 'Normal';
@@ -143,22 +95,11 @@ export default function UnifiedScreeningPage() {
             return score >= 34 ? 'Sangat Berat' : score >= 19 ? 'Sedang/Berat' : 'Normal';
         };
 
-        const getBurnoutRisk = (score, type) => {
-            if (type === 'exhaustion') return score >= 27 ? 'Tinggi' : score >= 17 ? 'Sedang' : 'Rendah';
-            if (type === 'depersonalization') return score >= 13 ? 'Tinggi' : score >= 7 ? 'Sedang' : 'Rendah';
-            return score >= 32 ? 'Tinggi' : score >= 24 ? 'Sedang' : 'Rendah'; // For reversed accomplishment
-        };
-
         setResult({
             dass: {
                 depression: { score: scores.depression, level: getDASSLevel(scores.depression, 'depression') },
                 anxiety: { score: scores.anxiety, level: getDASSLevel(scores.anxiety, 'anxiety') },
                 stress: { score: scores.stress, level: getDASSLevel(scores.stress, 'stress') }
-            },
-            burnout: {
-                exhaustion: { score: scores.exhaustion, risk: getBurnoutRisk(scores.exhaustion, 'exhaustion') },
-                depersonalization: { score: scores.depersonalization, risk: getBurnoutRisk(scores.depersonalization, 'depersonalization') },
-                accomplishment: { score: accomplishmentReversed, risk: getBurnoutRisk(accomplishmentReversed, 'accomplishment') } // Use reversed for risk
             }
         });
         setIsAnalyzing(false);
@@ -186,9 +127,9 @@ export default function UnifiedScreeningPage() {
             <NavigationControls />
 
             <header className="mb-8">
-                <h1 className="text-3xl font-bold mb-2">Penilaian Kesehatan Mental Lengkap</h1>
+                <h1 className="text-3xl font-bold mb-2">Kuesioner Kesehatan Mental</h1>
                 <p className="text-[var(--muted-foreground)]">
-                    Kuesioner ini menggabungkan standar klinis untuk Depresi, Kecemasan, Stres, dan Burnout.
+                    Kuesioner ini menggunakan standar DASS-21 untuk mengukur tingkat Depresi, Kecemasan, dan Stres.
                     Mohon jawab dengan jujur sesuai kondisi Anda.
                 </p>
             </header>
@@ -204,23 +145,12 @@ export default function UnifiedScreeningPage() {
             <div className="space-y-8">
                 {currentQuestions.map((q, index) => {
                     const globalIndex = (currentPage * ITEMS_PER_PAGE) + index;
-                    const isDass = q.source === 'dass';
-                    const options = isDass
-                        ? [
-                            { val: 0, label: "Tidak pernah" },
-                            { val: 1, label: "Kadang-kadang" },
-                            { val: 2, label: "Sering" },
-                            { val: 3, label: "Hampir selalu" }
-                        ]
-                        : [
-                            { val: 0, label: "Tidak pernah" },
-                            { val: 1, label: "Jarang" },
-                            { val: 2, label: "Kadang" },
-                            { val: 3, label: "Sering" },
-                            { val: 4, label: "Sering sekali" },
-                            { val: 5, label: "Hampir setiap hari" },
-                            { val: 6, label: "Setiap hari" }
-                        ];
+                    const options = [
+                        { val: 0, label: "Tidak pernah" },
+                        { val: 1, label: "Kadang-kadang" },
+                        { val: 2, label: "Sering" },
+                        { val: 3, label: "Hampir selalu" }
+                    ];
 
                     return (
                         <div key={globalIndex} className="card p-6 animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: `${index * 50}ms` }}>
@@ -228,7 +158,7 @@ export default function UnifiedScreeningPage() {
                                 <span className="text-[var(--muted-foreground)] mr-2">{globalIndex + 1}.</span>
                                 {q.text}
                             </p>
-                            <div className={`grid gap-2 ${isDass ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4'}`}>
+                            <div className="grid gap-2 grid-cols-2 sm:grid-cols-4">
                                 {options.map((opt) => (
                                     <button
                                         key={opt.val}
@@ -285,7 +215,7 @@ function ResultView({ result, onReset }) {
                 <p className="text-[var(--muted-foreground)]">Berdasarkan jawaban Anda pada kuesioner standar.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
                 {/* DASS Results */}
                 <div className="card space-y-6">
                     <h3 className="text-xl font-semibold border-b border-[var(--border)] pb-2">Kesehatan Mental Umum</h3>
@@ -295,22 +225,12 @@ function ResultView({ result, onReset }) {
                         <ResultRow label="Tingkat Depresi" level={result.dass.depression.level} score={result.dass.depression.score} />
                     </div>
                 </div>
-
-                {/* Burnout Results */}
-                <div className="card space-y-6">
-                    <h3 className="text-xl font-semibold border-b border-[var(--border)] pb-2">Risiko Burnout (Pekerjaan)</h3>
-                    <div className="space-y-4">
-                        <ResultRow label="Kelelahan Emosional" level={result.burnout.exhaustion.risk} score={result.burnout.exhaustion.score} isRisk={true} />
-                        <ResultRow label="Depersonalisasi" level={result.burnout.depersonalization.risk} score={result.burnout.depersonalization.score} isRisk={true} />
-                        <ResultRow label="Pencapaian Pribadi" level={result.burnout.accomplishment.risk} score={result.burnout.accomplishment.score} isRisk={true} />
-                    </div>
-                </div>
             </div>
 
             <div className="card bg-[var(--muted)] border-[var(--border)]">
                 <h3 className="font-semibold mb-2">Rekomendasi Singkat</h3>
                 <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
-                    {result.dass.stress.level === 'Sangat Berat' || result.burnout.exhaustion.risk === 'Tinggi'
+                    {result.dass.stress.level === 'Sangat Berat' || result.dass.depression.level === 'Sangat Berat' || result.dass.anxiety.level === 'Sangat Berat'
                         ? "Hasil menunjukkan indikasi beban mental yang signifikan. Sangat disarankan untuk mengambil jeda sejenak, berbicara dengan orang terpercaya, atau berkonsultasi dengan profesional."
                         : "Kondisi kesehatan mental Anda tampak cukup stabil. Pertahankan gaya hidup sehat dan manajemen stres yang baik."}
                 </p>

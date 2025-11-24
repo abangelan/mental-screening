@@ -9,14 +9,14 @@ export default function NavigationControls({ nextPath, nextLabel = "Selanjutnya"
     return (
         <div className="w-full space-y-6">
             {/* Top Navigation - Back and Home */}
-            <div className="flex gap-3 pb-6 border-b border-[var(--border)]">
+            <div className="flex justify-between items-center pb-6 border-b border-[var(--border)]">
                 <button
                     onClick={() => router.back()}
-                    className="btn btn-outline flex items-center gap-2 text-base px-6 py-3"
+                    className="btn btn-outline flex items-center gap-3 text-lg px-8 py-4 hover:bg-[var(--muted)] transition-all text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
                 >
-                    <span>←</span> Kembali
+                    <span className="text-xl">←</span> Kembali
                 </button>
-                <Link href="/dashboard" className="btn btn-outline flex items-center gap-2 text-base px-6 py-3">
+                <Link href="/" className="btn flex items-center gap-3 text-lg px-8 py-4 text-[var(--primary)] border border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition-all shadow-sm">
                     Beranda
                 </Link>
             </div>

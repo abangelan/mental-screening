@@ -1,31 +1,20 @@
 "use client";
 
 import Link from 'next/link';
-import { useUser } from '@/context/UserContext';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
-    const { role } = useUser();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathname = usePathname();
 
-    const patientLinks = [
-        { href: '/dashboard', label: 'Beranda' },
+    const links = [
+        { href: '/', label: 'Beranda' },
         { href: '/screening/text', label: 'Skrining Teks' },
         { href: '/screening/voice', label: 'Analisis Suara' },
         { href: '/screening/face', label: 'Analisis Wajah' },
-        { href: '/screening/test/standard', label: 'Tes Standar' },
+        { href: '/screening/test/standard', label: 'Kuesioner' },
     ];
-
-    const nakesLinks = [
-        { href: '/dashboard', label: 'Beranda' },
-        { href: '/screening/burnout', label: 'Cek Burnout' },
-        { href: '/patients', label: 'Data Pasien' },
-        { href: '/stats', label: 'Statistik' },
-    ];
-
-    const links = role === 'nakes' ? nakesLinks : patientLinks;
 
     return (
         <nav className="h-16 border-b border-[var(--border)] bg-[var(--card)]/80 backdrop-blur-md sticky top-0 z-50 flex items-center px-6 justify-between">
@@ -58,10 +47,6 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-full bg-[var(--muted)] flex items-center justify-center text-[var(--muted-foreground)]" title={role === 'nakes' ? 'Tenaga Kesehatan' : 'Pasien'}>
-                    {role === 'nakes' ? 'TK' : 'P'}
-                </div>
-
                 {/* Mobile Menu Button */}
                 <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -74,9 +59,6 @@ export default function Navbar() {
             {/* Mobile Menu Dropdown */}
             {isMenuOpen && (
                 <div className="absolute top-16 left-0 w-full bg-[var(--card)] border-b border-[var(--border)] p-4 flex flex-col gap-2 md:hidden shadow-lg animate-fade-in">
-                    <div className="text-sm font-semibold text-[var(--muted-foreground)] mb-2 px-2">
-                        Menu {role === 'nakes' ? 'Nakes' : 'Pasien'}
-                    </div>
                     {links.map((link) => {
                         const isActive = pathname === link.href;
                         return (
