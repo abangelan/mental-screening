@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+:root,
+[data-theme="dark"] {
   /* Dark Linear Background + Mental Health Green Accents */
 
   /* Background: Deep Dark (Linear Style) */
@@ -67,9 +68,81 @@
 
   /* Animations */
   --transition-base: 0.2s cubic-bezier(0.2, 0, 0, 1);
+
+  /* Grid lines for dark mode */
+  --grid-color: #1f2937;
 }
 
-/* Force Dark Mode Style */
+[data-theme="light"] {
+  /* Light Mode - Clean and Professional */
+
+  /* Background: Soft White/Cream */
+  --background-h: 210;
+  --background-s: 20%;
+  --background-l: 98%;
+  --background: hsl(var(--background-h), var(--background-s), var(--background-l));
+
+  /* Foreground: Dark Gray for readability */
+  --foreground-h: 220;
+  --foreground-s: 15%;
+  --foreground-l: 15%;
+  --foreground: hsl(var(--foreground-h), var(--foreground-s), var(--foreground-l));
+
+  /* Card: Pure White with subtle shadow */
+  --card-h: 0;
+  --card-s: 0%;
+  --card-l: 100%;
+  --card: hsl(var(--card-h), var(--card-s), var(--card-l));
+  --card-foreground: var(--foreground);
+
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: var(--foreground);
+
+  /* Primary: Mental Health Green (slightly darker for contrast) */
+  --primary-h: 150;
+  --primary-s: 55%;
+  --primary-l: 40%;
+  --primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+  --primary-foreground: hsl(0, 0%, 100%);
+
+  /* Secondary: Light Gray */
+  --secondary-h: 210;
+  --secondary-s: 15%;
+  --secondary-l: 95%;
+  --secondary: hsl(var(--secondary-h), var(--secondary-s), var(--secondary-l));
+  --secondary-foreground: var(--foreground);
+
+  /* Muted: Soft Gray */
+  --muted-h: 210;
+  --muted-s: 15%;
+  --muted-l: 92%;
+  --muted: hsl(var(--muted-h), var(--muted-s), var(--muted-l));
+  --muted-foreground: hsl(220, 10%, 45%);
+
+  /* Accent: Lighter Green */
+  --accent-h: 150;
+  --accent-s: 45%;
+  --accent-l: 92%;
+  --accent: hsl(var(--accent-h), var(--accent-s), var(--accent-l));
+  --accent-foreground: hsl(150, 55%, 30%);
+
+  --destructive: hsl(0, 70%, 50%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+
+  --border: hsl(220, 15%, 88%);
+  --input: hsl(220, 15%, 92%);
+  --ring: hsl(150, 55%, 40%);
+
+  --radius: 0.5rem;
+
+  /* Animations */
+  --transition-base: 0.2s cubic-bezier(0.2, 0, 0, 1);
+
+  /* Grid lines for light mode */
+  --grid-color: #e5e7eb;
+}
+
+/* Adaptive Theme Styles */
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -77,14 +150,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
-  /* Linear Grid Background */
+  /* Linear Grid Background - adapts to theme */
   background-image:
-    linear-gradient(to right, #1f2937 1px, transparent 1px),
-    linear-gradient(to bottom, #1f2937 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
   background-size: 4rem 4rem;
   background-position: center top;
-  background-position: center top;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Overlay for content to be readable over grid if needed */

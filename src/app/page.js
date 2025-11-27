@@ -1,4 +1,7 @@
+'use client';
+
 import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Home() {
   return (
@@ -11,11 +14,14 @@ export default function Home() {
           </div>
           <span className="text-[var(--foreground)]">Mental Screening</span>
         </div>
-        <div className="hidden sm:flex gap-6 text-sm font-medium text-[var(--muted-foreground)]">
-          <a href="#features" className="hover:text-[var(--foreground)] transition-colors">Fitur</a>
-          <a href="#why" className="hover:text-[var(--foreground)] transition-colors">Mengapa AI</a>
-          <a href="#about" className="hover:text-[var(--foreground)] transition-colors">Tentang</a>
-          <a href="#contact" className="hover:text-[var(--foreground)] transition-colors">Kontak</a>
+        <div className="flex items-center gap-6">
+          <div className="hidden sm:flex gap-6 text-sm font-medium text-[var(--muted-foreground)]">
+            <a href="#features" className="hover:text-[var(--foreground)] transition-colors">Fitur</a>
+            <a href="#why" className="hover:text-[var(--foreground)] transition-colors">Mengapa AI</a>
+            <a href="#about" className="hover:text-[var(--foreground)] transition-colors">Tentang</a>
+            <a href="#contact" className="hover:text-[var(--foreground)] transition-colors">Kontak</a>
+          </div>
+          <ThemeToggle />
         </div>
       </nav>
 
@@ -84,40 +90,76 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-              <div className="card p-6 flex items-start gap-4">
-                <div className="text-3xl">📝</div>
-                <div>
-                  <h3 className="font-semibold text-lg mb-2">Teks</h3>
-                  <p className="text-[var(--muted-foreground)] text-sm">Pengguna menulis tentang perasaan atau keluhan</p>
+              {/* Text Analysis */}
+              <div className="group card p-8 hover:shadow-xl transition-all duration-300">
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-xl mb-2 text-[var(--foreground)]">Analisis Teks</h3>
+                    <p className="text-[var(--muted-foreground)] leading-relaxed">Pengguna menulis tentang perasaan atau keluhan mereka untuk dianalisis oleh AI</p>
+                  </div>
                 </div>
               </div>
-              <div className="card p-6 flex items-start gap-4">
-                <div className="text-3xl">🎤</div>
-                <div>
-                  <h3 className="font-semibold text-lg mb-2">Suara</h3>
-                  <p className="text-[var(--muted-foreground)] text-sm">AI membaca pola suara terkait stres & kecemasan</p>
+
+              {/* Voice Analysis */}
+              <div className="group card p-8 hover:shadow-xl transition-all duration-300">
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-xl mb-2 text-[var(--foreground)]">Analisis Suara</h3>
+                    <p className="text-[var(--muted-foreground)] leading-relaxed">AI membaca pola suara terkait stres dan kecemasan dari rekaman audio</p>
+                  </div>
                 </div>
               </div>
-              <div className="card p-6 flex items-start gap-4">
-                <div className="text-3xl">🙂</div>
-                <div>
-                  <h3 className="font-semibold text-lg mb-2">Ekspresi Wajah (Opsional)</h3>
-                  <p className="text-[var(--muted-foreground)] text-sm">Deteksi micro-expression secara real-time</p>
+
+              {/* Facial Expression */}
+              <div className="group card p-8 hover:shadow-xl transition-all duration-300">
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-xl mb-2 text-[var(--foreground)]">Ekspresi Wajah <span className="text-sm font-normal text-[var(--muted-foreground)]">(Opsional)</span></h3>
+                    <p className="text-[var(--muted-foreground)] leading-relaxed">Deteksi micro-expression secara real-time melalui kamera</p>
+                  </div>
                 </div>
               </div>
-              <div className="card p-6 flex items-start gap-4">
-                <div className="text-3xl">📋</div>
-                <div>
-                  <h3 className="font-semibold text-lg mb-2">Tes Klinis Standar</h3>
-                  <p className="text-[var(--muted-foreground)] text-sm">PHQ-9, GAD-7, DASS-21, Burnout Index</p>
+
+              {/* Clinical Tests */}
+              <div className="group card p-8 hover:shadow-xl transition-all duration-300">
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-xl mb-2 text-[var(--foreground)]">Tes Klinis Standar</h3>
+                    <p className="text-[var(--muted-foreground)] leading-relaxed">PHQ-9, GAD-7, DASS-21, dan Burnout Index yang tervalidasi</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="text-center p-6 bg-[var(--primary)]/10 border border-[var(--primary)]/30 rounded-lg">
-              <p className="text-[var(--foreground)] font-medium">
-                🔒 Semua diproses dengan teknologi <strong>on-device AI</strong> untuk menjaga kerahasiaan data.
-              </p>
+            <div className="relative overflow-hidden text-center p-8 bg-gradient-to-r from-[var(--primary)]/10 via-[var(--primary)]/5 to-[var(--primary)]/10 border border-[var(--primary)]/20 rounded-xl">
+              <div className="relative z-10 flex items-center justify-center gap-3">
+                <svg className="w-6 h-6 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <p className="text-[var(--foreground)] font-semibold">
+                  Semua diproses dengan teknologi <strong>on-device AI</strong> untuk menjaga kerahasiaan data Anda
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -132,88 +174,122 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="space-y-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Feature 1 */}
-              <div className="card p-8 hover:border-[var(--primary)] transition-all">
+              <div className="group card p-8 hover:shadow-2xl transition-all duration-300 border-l-4 border-l-transparent hover:border-l-blue-500">
                 <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 rounded-xl bg-[var(--primary)]/20 text-3xl flex items-center justify-center flex-shrink-0">
-                    📝
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                      1
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3">🔹 1. Analisis Teks Berbasis NLP Klinis</h3>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold mb-3 text-[var(--foreground)]">Analisis Teks Berbasis NLP Klinis</h3>
                     <p className="text-[var(--muted-foreground)] leading-relaxed mb-4">
-                      AI membaca tulisan Anda dan mendeteksi tanda-tanda emosional seperti <strong className="text-[var(--foreground)]">overthinking, hopelessness, fear, irritability</strong>, dan lainnya.
+                      AI membaca tulisan Anda dan mendeteksi tanda-tanda emosional seperti <strong className="text-[var(--foreground)]">overthinking, hopelessness, fear, irritability</strong>, dan lainnya menggunakan Natural Language Processing yang terlatih secara klinis.
                     </p>
                   </div>
                 </div>
               </div>
 
               {/* Feature 2 */}
-              <div className="card p-8 hover:border-[var(--primary)] transition-all">
+              <div className="group card p-8 hover:shadow-2xl transition-all duration-300 border-l-4 border-l-transparent hover:border-l-purple-500">
                 <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 rounded-xl bg-[var(--primary)]/20 text-3xl flex items-center justify-center flex-shrink-0">
-                    🎤
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                      2
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3">🔹 2. Voice Emotion Analyzer</h3>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold mb-3 text-[var(--foreground)]">Voice Emotion Analyzer</h3>
                     <p className="text-[var(--muted-foreground)] leading-relaxed mb-4">
-                      Cukup bicara selama <strong className="text-[var(--foreground)]">20–40 detik</strong>. AI menganalisis:
+                      Cukup bicara selama <strong className="text-[var(--foreground)]">20–40 detik</strong>. AI menganalisis berbagai aspek suara Anda:
                     </p>
-                    <ul className="list-disc list-inside space-y-2 text-[var(--muted-foreground)] ml-4">
-                      <li>Tekanan emosional</li>
-                      <li>Tremor suara</li>
-                      <li>Ritme bicara</li>
-                      <li>Pola napas</li>
-                    </ul>
-                    <p className="text-[var(--muted-foreground)] mt-4">
-                      Hasilnya menunjukkan tingkat stres dan kecemasan Anda.
-                    </p>
+                    <div className="grid grid-cols-2 gap-3 mt-4">
+                      <div className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
+                        <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+                        Tekanan emosional
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
+                        <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+                        Tremor suara
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
+                        <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+                        Ritme bicara
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
+                        <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+                        Pola napas
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Feature 3 */}
-              <div className="card p-8 hover:border-[var(--primary)] transition-all">
+              <div className="group card p-8 hover:shadow-2xl transition-all duration-300 border-l-4 border-l-transparent hover:border-l-green-500">
                 <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 rounded-xl bg-[var(--primary)]/20 text-3xl flex items-center justify-center flex-shrink-0">
-                    📷
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                      3
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3">🔹 3. Facial Micro-Expression Detection (Opsional)</h3>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold mb-3 text-[var(--foreground)]">Facial Micro-Expression Detection</h3>
+                    <p className="text-sm text-[var(--muted-foreground)] mb-3 italic">Opsional</p>
                     <p className="text-[var(--muted-foreground)] leading-relaxed mb-4">
-                      Dengan kamera depan, AI membaca ekspresi halus yang sering tidak kita sadari:
+                      Dengan kamera depan, AI membaca ekspresi halus yang sering tidak kita sadari untuk mendeteksi tanda-tanda kelelahan, ketegangan, dan depresi ringan.
                     </p>
-                    <ul className="list-disc list-inside space-y-2 text-[var(--muted-foreground)] ml-4">
-                      <li>Kelelahan</li>
-                      <li>Ketegangan</li>
-                      <li>Tanda depresi ringan</li>
-                    </ul>
-                    <p className="text-[var(--primary)] font-medium mt-4">
-                      🔒 Privasi terjamin — tidak ada video yang disimpan.
-                    </p>
+                    <div className="flex items-center gap-2 mt-4 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
+                      <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                      <p className="text-sm text-green-700 dark:text-green-400 font-medium">Privasi terjamin — tidak ada video yang disimpan</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-
-
-              {/* Feature 5 */}
-              <div className="card p-8 hover:border-[var(--primary)] transition-all">
+              {/* Feature 4 */}
+              <div className="group card p-8 hover:shadow-2xl transition-all duration-300 border-l-4 border-l-transparent hover:border-l-orange-500">
                 <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 rounded-xl bg-[var(--primary)]/20 text-3xl flex items-center justify-center flex-shrink-0">
-                    💡
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                      4
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3">🔹 5. Rekomendasi Personal Berbasis AI</h3>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold mb-3 text-[var(--foreground)]">Rekomendasi Personal Berbasis AI</h3>
                     <p className="text-[var(--muted-foreground)] leading-relaxed mb-4">
-                      Setelah skrining, pengguna mendapatkan:
+                      Setelah skrining, Anda mendapatkan rekomendasi yang dipersonalisasi:
                     </p>
-                    <ul className="list-disc list-inside space-y-2 text-[var(--muted-foreground)] ml-4">
-                      <li>Saran coping mechanism</li>
-                      <li>Latihan relaksasi</li>
-                      <li>Edukasi mental health</li>
-                      <li>Rekomendasi konsultasi klinis jika diperlukan</li>
-                    </ul>
+                    <div className="space-y-2 mt-4">
+                      <div className="flex items-start gap-3">
+                        <svg className="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-sm text-[var(--muted-foreground)]">Saran coping mechanism yang sesuai</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <svg className="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-sm text-[var(--muted-foreground)]">Latihan relaksasi dan mindfulness</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <svg className="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-sm text-[var(--muted-foreground)]">Edukasi kesehatan mental</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <svg className="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-sm text-[var(--muted-foreground)]">Rekomendasi konsultasi profesional jika diperlukan</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
